@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seyzn.ruanererzu.mapper.UsersMapper">
+
+    <resultMap type="com.seyzn.ruanererzu.domain.UsersEntity" id="UsersMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPwd" column="user_pwd" jdbcType="VARCHAR"/>
+        <result property="userPic" column="user_pic" jdbcType="VARCHAR"/>
+        <result property="userType" column="user_type" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="delMark" column="del_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UsersMap">
+        select
+          user_id, user_name, user_pwd, user_pic, user_type, remark, del_mark
+        from users
+        where user_id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UsersMap">
+        select
+          user_id, user_name, user_pwd, user_pic, user_type, remark, del_mark
+        from users
+        where del_mark=1
+
+            <if test="users.userId != null">
+                and user_id = #{users.userId}
+            </if>
+            <if test="users.userName != null and users.userName != ''">
+                and user_name = #{users.userName}
+            </if>
+            <if test="users.userPwd != null and users.userPwd != ''">
+                and user_pwd = #{users.userPwd}
+            </if>
+            <if test="users.userPic != null and users.userPic != ''">
+                and user_pic = #{users.userPic}
+            </if>
+            <if test="users.userType != null">
+                and user_type = #{users.userType}
+            </if>
+            <if test="users.remark != null and users.remark != ''">
+                and remark = #{users.remark}
+            </if>
+            <if test="users.delMark != null">
+                and del_mark = #{users.delMark}
+            </if>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from users
+        where del_mark=1
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="userPwd != null and userPwd != ''">
+                and user_pwd = #{userPwd}
+            </if>
+            <if test="userPic != null and userPic != ''">
+                and user_pic = #{userPic}
+            </if>
+            <if test="userType != null">
+                and user_type = #{userType}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="delMark != null">
+                and del_mark = #{delMark}
+            </if>
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into users(user_name, user_pwd, user_pic, user_type, remark, del_mark)
+        values (#{userName}, 'd8/ZDtAN2a7IDQmuAZ1B0w==', #{userPic}, #{userType}, #{remark}, 1)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into users(user_name, user_pwd, user_pic, user_type, remark, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userName}, #{entity.userPwd}, #{entity.userPic}, #{entity.userType}, #{entity.remark}, #{entity.delMark})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into users(user_name, user_pwd, user_pic, user_type, remark, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.userPwd}, #{entity.userPic}, #{entity.userType}, #{entity.remark}, #{entity.delMark})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name),
+        user_pwd = values(user_pwd),
+        user_pic = values(user_pic),
+        user_type = values(user_type),
+        remark = values(remark),
+        del_mark = values(del_mark)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update users
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userPwd != null and userPwd != ''">
+                user_pwd = #{userPwd},
+            </if>
+            <if test="userPic != null and userPic != ''">
+                user_pic = #{userPic},
+            </if>
+            <if test="userType != null">
+                user_type = #{userType},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="delMark != null">
+                del_mark = #{delMark},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+    <select id="login" parameterType="map" resultMap="UsersMap">
+        select
+            user_id,user_name,user_pic,user_type,remark
+        from users
+        where del_mark = 1
+            and user_name= #{userName}
+            and user_pwd = #{userPwd}
+    </select>
+
+    <!--通过主键删除-->
+<!--    <delete id="deleteById">-->
+<!--        delete from users where user_id = #{userId}-->
+<!--    </delete>-->
+    <update id="deleteById">
+        UPDATE users SET del_mark = 0 WHERE user_id = #{proId}
+    </update>
+
+
+</mapper>
+

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seyzn.ruanererzu.mapper.ProductTypesMapper">
+
+    <resultMap type="com.seyzn.ruanererzu.domain.ProductTypesEntity" id="ProductTypesMap">
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="typeDesc" column="type_desc" jdbcType="VARCHAR"/>
+        <result property="delMark" column="del_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProductTypesMap">
+        select
+          type_id, type_name, type_desc, del_mark
+        from product_types
+        where type_id = #{typeId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ProductTypesMap">
+        select
+          type_id, type_name, type_desc, del_mark
+        from product_types
+        where del_mark = 1
+
+            <if test="productTypes.typeId != null">
+                and type_id = #{productTypes.typeId}
+            </if>
+            <if test="productTypes.typeName != null and productTypes.typeName != ''">
+                and type_name = #{productTypes.typeName}
+            </if>
+            <if test="productTypes.typeDesc != null and productTypes.typeDesc != ''">
+                and type_desc = #{productTypes.typeDesc}
+            </if>
+
+
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from product_types
+        where del_mark = 1
+
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="typeName != null and typeName != ''">
+                and type_name = #{typeName}
+            </if>
+            <if test="typeDesc != null and typeDesc != ''">
+                and type_desc = #{typeDesc}
+            </if>
+            <if test="delMark != null">
+                and del_mark = #{delMark}
+            </if>
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="typeId" useGeneratedKeys="true">
+        insert into product_types(type_name, type_desc, del_mark)
+        values (#{typeName}, #{typeDesc}, 1)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="typeId" useGeneratedKeys="true">
+        insert into product_types(type_name, type_desc, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.typeName}, #{entity.typeDesc}, #{entity.delMark})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="typeId" useGeneratedKeys="true">
+        insert into product_types(type_name, type_desc, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.typeName}, #{entity.typeDesc}, #{entity.delMark})
+        </foreach>
+        on duplicate key update
+        type_name = values(type_name),
+        type_desc = values(type_desc),
+        del_mark = values(del_mark)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update product_types
+        <set>
+            <if test="typeName != null and typeName != ''">
+                type_name = #{typeName},
+            </if>
+            <if test="typeDesc != null and typeDesc != ''">
+                type_desc = #{typeDesc},
+            </if>
+            <if test="delMark != null">
+                del_mark = #{delMark},
+            </if>
+        </set>
+        where type_id = #{typeId}
+    </update>
+
+    <!--通过主键删除-->
+<!--    <delete id="deleteById">-->
+<!--        delete from product_types where type_id = #{typeId}-->
+<!--    </delete>-->
+    <update id="deleteById">
+        UPDATE product_types SET del_mark = 0 WHERE type_id = #{proId}
+    </update>
+
+</mapper>
+

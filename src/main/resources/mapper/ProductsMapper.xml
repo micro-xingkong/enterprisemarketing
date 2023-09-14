@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seyzn.ruanererzu.mapper.ProductsMapper">
+
+    <resultMap type="com.seyzn.ruanererzu.domain.ProductTypesEntity" id="ProductTypesMap">
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="typeDesc" column="type_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="com.seyzn.ruanererzu.domain.ProductsEntity" id="ProductsMap">
+        <result property="proId" column="pro_id" jdbcType="INTEGER"/>
+        <result property="proName" column="pro_name" jdbcType="VARCHAR"/>
+        <result property="proDesc" column="pro_desc" jdbcType="VARCHAR"/>
+        <result property="proPrice" column="pro_price" jdbcType="NUMERIC"/>
+        <!--依赖标签-->
+        <association property="productTypes" resultMap="ProductTypesMap"/>
+    </resultMap>
+
+    <sql id="baseSel">
+        SELECT p.`pro_id`, p.`pro_name`, p.`pro_price`, p.`pro_desc`,
+               t.`type_id`, t.`type_name`, t.`type_desc`
+        FROM products p, product_types t
+        WHERE p.`type_id` = t.`type_id` AND p.`del_mark` = 1
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ProductsMap">
+        <include refid="baseSel"></include>
+        and pro_id = #{proId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ProductsMap">
+        <include refid="baseSel"></include>
+            <if test="products.proId != null">
+                and pro_id = #{products.proId}
+            </if>
+            <if test="products.productTypes != null and products.productTypes.typeId != null">
+                and type_id = #{products.productTypes.typeId}
+            </if>
+            <if test="products.proName != null and products.proName != ''">
+                and pro_name = #{products.proName}
+            </if>
+            <if test="products.proDesc != null and products.proDesc != ''">
+                and pro_desc = #{products.proDesc}
+            </if>
+            <if test="products.proPrice != null">
+                and pro_price = #{products.proPrice}
+            </if>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from (<include refid="baseSel"></include>) t
+        <where>
+            <if test="productTypes != null and productTypes.proId != null">
+                and pro_id = #{productTypes.proId}
+            </if>
+            <if test="productTypes != null and productTypes.typeId != null">
+                and type_id = #{productTypes.typeId}
+            </if>
+            <if test="proName != null and proName != ''">
+                and pro_name = #{proName}
+            </if>
+            <if test="proDesc != null and proDesc != ''">
+                and pro_desc = #{proDesc}
+            </if>
+            <if test="proPrice != null">
+                and pro_price = #{proPrice}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="proId" useGeneratedKeys="true">
+        insert into products(type_id, pro_name, pro_desc, pro_price, del_mark)
+        values (#{productTypes.typeId}, #{proName}, #{proDesc}, #{proPrice}, 1)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="proId" useGeneratedKeys="true">
+        insert into products(type_id, pro_name, pro_desc, pro_price, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.productTypes.typeId}, #{entity.proName}, #{entity.proDesc}, #{entity.proPrice}, #{entity.delMark})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="proId" useGeneratedKeys="true">
+        insert into products(type_id, pro_name, pro_desc, pro_price, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.productTypes.typeId}, #{entity.proName}, #{entity.proDesc}, #{entity.proPrice}, #{entity.delMark})
+        </foreach>
+        on duplicate key update
+        type_id = values(type_id),
+        pro_name = values(pro_name),
+        pro_desc = values(pro_desc),
+        pro_price = values(pro_price),
+        del_mark = values(del_mark)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update products
+        <set>
+            <if test="productTypes != null and productTypes.typeId != null">
+                type_id = #{productTypes.typeId},
+            </if>
+            <if test="proName != null and proName != ''">
+                pro_name = #{proName},
+            </if>
+            <if test="proDesc != null and proDesc != ''">
+                pro_desc = #{proDesc},
+            </if>
+            <if test="proPrice != null">
+                pro_price = #{proPrice},
+            </if>
+            <if test="delMark != null">
+                del_mark = #{delMark},
+            </if>
+        </set>
+        where pro_id = #{proId}
+    </update>
+
+    <!--通过主键删除-->
+    <update id="deleteById">
+        update products  set del_mark = 0 where pro_id = #{proId}
+    </update>
+
+</mapper>
+

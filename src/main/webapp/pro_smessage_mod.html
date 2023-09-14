@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/materialdesignicons.min.css" rel="stylesheet">
+	<!--标签插件-->
+	<link rel="stylesheet" href="js/jquery-tags-input/jquery.tagsinput.min.css">
+	<link href="css/style.min.css" rel="stylesheet">
+
+	<link href="css/animate.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-body">
+
+					<form action="#!" method="post" class="row">
+						<!-- <div class="col-md-5 col-md-offset-3"> -->
+						<div class="col-md-5">
+							<div class="form-group col-md-12">
+								<label for="sellId">销售ID</label>
+								<input class="form-control" id="sellId" readonly>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="user">销售用户</label>
+								<select id="user" class="form-control">
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="products">选择商品</label>
+								<select id="products" class="form-control">
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="customer">客户</label>
+								<select id="customer" class="form-control">
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="form-group col-md-12">
+								<label for="sellCount">销售数量</label>
+								<input type="number" class="form-control" id="sellCount" name="sellCount" rows="5" value=""
+									   placeholder="请输入商品销售数量" />
+							</div>
+							<div class="form-group col-md-12">
+								<label for="sellDesc">描述</label>
+								<textarea class="form-control" id="sellDesc" name="sellDesc" rows="5" value=""
+										  placeholder="请输入销售描述"></textarea>
+							</div>
+							<div class="form-group col-md-12">
+								<button onclick="modSell()" type="button" class="btn btn-primary ajax-post"
+										target-form="add-form">修改销售记录</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<!--标签插件-->
+<script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="js/main.min.js">
+
+	<!--消息提示-->
+	<script src="js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="js/lightyear.js"></script>
+<script>
+	//modSellId
+	$(function(){
+		//加载所有商品
+		loadPros();
+
+	})
+
+	/**
+	 * 显示商品
+	 */
+	function loadPros(){
+		let param = {
+			"page": 1,
+			"size": 100000
+		}
+		//请求类别
+		$.getJSON("products/queryByPage", param, function(rvo){
+			console.log("products/queryByPage: ", rvo);
+
+			//清理下拉列表内容
+			$("#products").empty();
+			//遍历添加类别信息到下拉列表
+			for(let pro of rvo.content.content){
+				//拼接行选项
+				let row = `<option value="${pro.proId}">${pro.proName}</option>`;
+				//添加到下拉列表
+				$("#products").append(row);
+			}
+
+			// 显示所有员工
+			loadUsers();
+
+		});
+	}
+
+	/**
+	 * 显示所有员工
+	 */
+	function loadUsers(){
+		let param = {
+			"page": 1,
+			"size": 100000
+		}
+		//请求类别
+		$.getJSON("users/queryByPage", param, function(rvo){
+			console.log("users/queryByPage: ", rvo);
+
+			//清理下拉列表内容
+			$("#user").empty();
+			//遍历添加类别信息到下拉列表
+			for(let user of rvo.content.content){
+				//拼接行选项
+				let row = `<option value="${user.userId}">${user.userName}</option>`;
+				//添加到下拉列表
+				$("#user").append(row);
+			}
+
+			//显示所有客户
+			loadCustomers();
+		});
+	}
+
+	/**
+	 * 显示所有客户
+	 */
+	function loadCustomers(){
+		let param = {
+			"page": 1,
+			"size": 100000
+		}
+		//请求类别
+		$.getJSON("customers/queryByPage", param, function(rvo){
+			console.log("customers/queryByPage: ", rvo);
+
+			//清理下拉列表内容
+			$("#customer").empty();
+			//遍历添加类别信息到下拉列表
+			for(let cus of rvo.content.content){
+				//拼接行选项
+				let row = `<option value="${cus.cusId}">${cus.cusName}</option>`;
+				//添加到下拉列表
+				$("#customer").append(row);
+			}
+			//设置修改信息
+			showModInfo();
+		});
+	}
+
+	/**
+	 * 设置修改信息
+	 */
+	function showModInfo(){
+		let sellId = sessionStorage.getItem("modSellId");
+		if(!sellId){
+			lightyear.notify("查无要修改的销售信息", "danger", 1000);
+			location.href = "pro_smessage_list.html";
+			return;
+		}
+		//从数据库，根据ID查询商品
+		$.getJSON("sellInfos/queryById/"+sellId, function(rvo){
+			console.log("sellInfos/queryById/: ", rvo);
+			if(rvo.code != 1){
+				lightyear.notify(rvo.msg, "danger", 1000);
+				location.href = "pro_smessage_list.html";
+				return;
+			}
+
+			// 显示要修改的对象到页面
+			$("#sellId").val(rvo.content.sellId);
+			$("#products").val(rvo.content.product.proId);
+			$("#user").val(rvo.content.user.userId);
+			$("#customer").val(rvo.content.customer.cusId);
+			$("#sellCount").val(rvo.content.sellCount);
+			$("#sellDesc").val(rvo.content.sellDesc);
+
+		})
+	}
+
+	function modSell(){
+		//1- 获取添加商品的信息
+		let sellId = $("#sellId").val();
+		let proId = $("#products").val();
+		let userId = $("#user").val();
+		let cusId = $("#customer").val();
+		let sellCount = $("#sellCount").val();
+		let sellDesc = $("#sellDesc").val();
+		//2- 封装提交参数
+		let param = {
+			"sellId": sellId,
+			"product.proId": proId,
+			"user.userId": userId,
+			"customer.cusId": cusId,
+			"sellCount": sellCount,
+			"sellDesc": sellDesc
+		}
+
+		//3- 请求修改
+		$.getJSON("sellInfos/edit", param, function(rvo){
+			console.log("sellInfos/edit", rvo);
+			//添加修改
+			if(rvo.code != 1){
+				lightyear.notify(rvo.msg, "danger", 1000);
+				return;
+			}
+
+			//添加成功，跳转到页面显示
+			location.href = "./pro_smessage_list.html";
+
+		});
+
+	}
+
+
+
+</script>
+</body>
+</html>

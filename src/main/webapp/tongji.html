@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>销售业绩分析后台管理系统</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-primary">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">今日收入</p>
+            <p class="h3 text-white m-b-0 fa-1-5x">200,000</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-currency-cny fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-danger">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">用户总数</p>
+            <p class="h3 text-white m-b-0 fa-1-5x">600</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-success">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">下载总量</p>
+            <p class="h3 text-white m-b-0 fa-1-5x">5,000</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-arrow-down-bold fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-purple">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">新增留言</p>
+            <p class="h3 text-white m-b-0 fa-1-5x">153 条</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-outline fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    
+    <div class="col-md-6"> 
+      <div class="card">
+        <div class="card-header">
+          <h4>每周用户</h4>
+        </div>
+        <div class="card-body">
+          <canvas class="js-chartjs-bars"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6"> 
+      <div class="card">
+        <div class="card-header">
+          <h4>交易历史记录</h4>
+        </div>
+        <div class="card-body">
+          <canvas class="js-chartjs-lines"></canvas>
+        </div>
+      </div>
+    </div>
+     
+  </div>
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>项目信息</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>服装名称</th>
+                  <th>服装类型</th>
+                  <th>交易日期</th>
+                  <th>销售数量</th>
+                  <th>状态</th>
+                  <th>库存</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>托马斯回旋上衣</td>
+                  <td>上衣</td>
+                  <td>10/02/2019</td>
+                  <td>250</td>
+                  <td><span class="label label-warning">滞销</span></td>
+                  <td>
+                    <div class="progress progress-striped progress-sm">
+                      <div class="progress-bar progress-bar-warning" style="width: 45%;"></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>鸡哥上衣</td>
+                  <td>上衣</td>
+                  <td>10/02/2019</td>
+                  <td>200</td>
+                  <td><span class="label label-success">充足</span></td>
+                  <td>
+                    <div class="progress progress-striped progress-sm">
+                      <div class="progress-bar progress-bar-success" style="width: 30%;"></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>鸡哥牛仔</td>
+                  <td>裤子</td>
+                  <td>10/02/2019</td>
+                  <td>152</td>
+                  <td><span class="label label-warning">滞销</span></td>
+                  <td>
+                    <div class="progress progress-striped progress-sm">
+                      <div class="progress-bar progress-bar-warning" style="width: 25%;"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/main.min.js"></script>
+
+<!--图表插件-->
+<script type="text/javascript" src="js/Chart.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    var $dashChartBarsCnt  = jQuery( '.js-chartjs-bars' )[0].getContext( '2d' ),
+        $dashChartLinesCnt = jQuery( '.js-chartjs-lines' )[0].getContext( '2d' );
+    
+    var $dashChartBarsData = {
+		labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+		datasets: [
+			{
+				label: '注册用户',
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0)',
+				backgroundColor: 'rgba(51,202,185,0.5)',
+                hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                hoverBorderColor: "rgba(0,0,0,0)",
+				data: [2500, 1500, 1200, 3200, 4800, 3500, 1500]
+			}
+		]
+	};
+    var $dashChartLinesData = {
+		labels: ['2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014'],
+		datasets: [
+			{
+				label: '交易资金',
+				data: [20, 25, 40, 30, 45, 40, 55, 40, 48, 40, 42, 50],
+				borderColor: '#358ed7',
+				backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                borderWidth: 1,
+                fill: false,
+                lineTension: 0.5
+			}
+		]
+	};
+    
+    new Chart($dashChartBarsCnt, {
+        type: 'bar',
+        data: $dashChartBarsData
+    });
+    
+    var myLineChart = new Chart($dashChartLinesCnt, {
+        type: 'line',
+        data: $dashChartLinesData,
+    });
+});
+</script>
+</body>
+</html>

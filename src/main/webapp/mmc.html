@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>首页 - EMD分析系统</title>
+		<link rel="icon" href="favicon.ico" type="image/ico">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/materialdesignicons.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="js/bootstrap-multitabs/multitabs.min.css">
+		<link href="css/style.min.css" rel="stylesheet">
+		<link href="css/animate.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container-fluid p-t-15">
+
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-header">
+							<h4>商品类别销售趋势</h4>
+						</div>
+						<div class="card-body" width="100%">
+							<div id="chart-line-4" style="width:100%; height: 250px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-header">
+							<h4>商品类别销售量</h4>
+						</div>
+						<div class="card-body" width="100%">
+							<div id="chart-vbar-2" style="width:100%; height: 250px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+		<script src="./js/echarts.js"></script>
+		<!--消息提示-->
+		<script src="js/bootstrap-notify.min.js"></script>
+		<script type="text/javascript" src="js/lightyear.js"></script>
+		<script type="text/javascript" src="js/main.min.js"></script>
+		<script type="text/javascript">
+			//商品类别销售趋势图 echart 对象
+			var proTypeLineChart = null;
+			var proTypeBarChart = null;
+
+			$(function(){
+				//商品类别销售趋势图
+				viewProTypeLineChart();
+
+				//商品类别销售量图
+				viewProTypeBarChart();
+
+
+				loadBarChartData();
+			});
+
+			/**
+			 * 商品类别销售趋势图
+			 */
+			function viewProTypeLineChart() {
+				proTypeLineChart = echarts.init(document.getElementById("chart-line-4"));
+				let option = {
+							//标题
+							title: {
+								text: ''
+							},
+							//鼠标悬浮的提示
+							tooltip: {},
+							//图例
+							legend: {
+								data: ['日用品', '副食', '家电', '汽车用品']
+							},
+							//x轴信息
+							xAxis: {
+								data: ['4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '4.10']
+							},
+							//y轴信息（默认使用数据的值，自动计算显示）
+							yAxis: {}
+							,
+							//数据
+							series: [
+								{
+									name: '日用品',
+									type: 'line',
+									smooth: true,
+									data: [179, 122, 121, 104, 90, 100, 20]
+								},
+								{
+									name: '副食',
+									type: 'line',
+									smooth: true,
+									data: [120, 132, 101, 230, 210, 40, 133]
+								},
+								{
+									name: '家电',
+									type: 'line',
+									smooth: true,
+									data: [20, 32, 11, 23, 20, 40, 33]
+								},
+							]
+						};
+				proTypeLineChart.setOption(option);
+				//加载后台数据
+				loadLineChartData();
+
+			}
+
+
+			/**
+			 * 商品类别销售量图
+			 */
+			function viewProTypeBarChart() {
+				proTypeBarChart = echarts.init(document.getElementById("chart-vbar-2"));
+				let option = {
+					//标题
+					title: {
+						text: ''
+					},
+					//鼠标悬浮的提示
+					tooltip: {},
+					//图例
+					legend: {
+						data: ['日用品', '副食', '家电', '汽车用品']
+					},
+					//x轴信息
+					xAxis: {
+						data: ['4.4', '4.5', '4.6', '4.7', '4.8', '4.9', '4.10']
+					},
+					//y轴信息（默认使用数据的值，自动计算显示）
+					yAxis: {}
+					,
+					//数据
+					series: [
+						{
+							name: '日用品',
+							type: 'bar',
+							smooth: true,
+							data: [179, 122, 121, 104, 90, 100, 20]
+						},
+						{
+							name: '副食',
+							type: 'bar',
+							smooth: true,
+							data: [120, 132, 101, 230, 210, 40, 133]
+						},
+						{
+							name: '家电',
+							type: 'bar',
+							smooth: true,
+							data: [20, 32, 11, 23, 20, 40, 33]
+						},
+					]
+				};
+				proTypeBarChart.setOption(option);
+			}
+
+			function loadLineChartData(){
+				$.getJSON("sellInfos/getProTypeSellInfo", function(riv){
+					console.log("getProTypeSellInfo", riv);
+					if(riv.code != 1){
+						lightyear.notify(riv.msg, 'danger', 100);
+						return;
+					}
+
+					let option = {
+						xAxis: {
+							data: riv.content.xData
+						},
+						legend: {
+							data: riv.content.legDate
+						},
+						series: riv.content.serList
+					}
+
+					console.log("option2", JSON.stringify(option));
+
+					proTypeLineChart.setOption(option);
+				})
+			}
+
+			function loadBarChartData(){
+				$.getJSON("sellInfos/queryProTypeBarChart", function(riv){
+					console.log("queryProTypeBarChart", riv);
+					if(riv.code != 1){
+						lightyear.notify(riv.msg, 'danger', 100);
+						return;
+					}
+
+					let option = {
+						xAxis: {
+							data: riv.content.xAxis
+						},
+						legend: {
+							data: riv.content.legend
+						},
+						series: riv.content.series
+					}
+
+					proTypeBarChart.setOption(option);
+				})
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,320 @@
+<html lang="zh"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>首页 - 企业销售业绩分析系统</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="js/bootstrap-multitabs/multitabs.min.css">
+<link href="css/style.min.css" rel="stylesheet">
+<link rel="stylesheet" href="./js/bootstrap-icons-1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href="./css/bootstrap-icons.min.css">
+<style type="text/css">@font-face { font-family: TencentSans; src: url("moz-extension://51645218-fdc3-446a-be07-dc4d57a79b73/static/fonts/TencentSans.woff2"); }</style></head>
+  
+<body class="full-height-layout">
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside class="lyear-layout-sidebar">
+      
+      <!-- logo -->
+      <div id="logo" class="sidebar-header">
+        <a href="index.html"><img src="images/gallery/logo1.png" title="LightYear" alt="LightYear"></a>
+      </div>
+      <div class="lyear-layout-sidebar-scroll ps"> 
+        
+        <nav class="sidebar-main">
+          <ul class="nav nav-drawer">
+            <li class="nav-item active"> <a class="multitabs" href="shouye.html"><i class="bi bi-house-door-fill"></i> <span>后台首页</span></a> </li>
+              <li class="nav-item nav-item-has-subnav">
+                  <a href="javascript:void(0)"><i class="bi bi-cart4"></i><span>商品类别管理</span></a>
+                  <ul class="nav nav-subnav" style="display: none;">
+                      <li> <a class="multitabs" href="pro_type_list.html">浏览商品类别</a> </li>
+                      <li> <a class="multitabs" href="pro_type_add.html">添加商品类别</a> </li>
+                  </ul>
+              </li>
+              <li class="nav-item nav-item-has-subnav">
+              <a href="javascript:void(0)"><i class="bi bi-cart4"></i><span>商品管理</span></a>
+              <ul class="nav nav-subnav" style="display: none;">
+                <li> <a class="multitabs" href="shangpin_list.html">浏览商品</a> </li>
+                <li> <a class="multitabs" href="shangpin_add.html">添加商品</a> </li>
+              </ul>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="javascript:void(0)"><i class="bi bi-person-fill"></i> <span>客户管理</span></a>
+              <ul class="nav nav-subnav" style="display: none;">
+                <li> <a class="multitabs" href="pro_cus_type_list.html">浏览客户</a> </li>
+                <li> <a class="multitabs" href="pro_cus_type_add.html">添加客户</a> </li>
+              </ul>
+            </li>
+              <li class="nav-item nav-item-has-subnav">
+                  <a href="javascript:void(0)"><i class="bi bi-person-fill"></i> <span>员工管理</span></a>
+                  <ul class="nav nav-subnav" style="display: none;">
+                      <li> <a class="multitabs" href="pro_user_type_list.html">浏览员工</a> </li>
+                      <li> <a class="multitabs" href="pro_user_type_add.html">添加员工</a> </li>
+                  </ul>
+              </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="javascript:void(0)"><i class="bi bi-box2-fill"></i> <span>销售信息管理</span></a>
+              <ul class="nav nav-subnav" style="display: none;">
+                <li> <a class="multitabs" href="pro_smessage_list.html">浏览销售信息</a> </li>
+                <li> <a class="multitabs" href="pro_smessage_add.html">添加销售信息</a> </li>
+              </ul>
+            </li>
+			<li class="nav-item nav-item-has-subnav">
+			  <a href="javascript:void(0)"><i class="bi bi-card-checklist"></i> <span>销售与评估</span></a>
+			  <ul class="nav nav-subnav" style="display: none;">
+			    <li> <a class="multitabs" href="mc.html">销售评估</a> </li>
+                  <li> <a class="multitabs" href="mmc.html">销售评估</a> </li>
+
+
+              </ul>
+			</li>
+          </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <p class="copyright">Create By © 2023 . 软二·&emsp;<i class="bi bi-2-circle"></i>组.</p>
+        </div>
+      <div class="ps__rail-x" style="left: 0px; bottom: 2px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 2px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+      
+    </aside>
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+          </div>
+          
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" data-toggle="dropdown">
+                <img class="img-avatar img-avatar-48 m-r-10" src="images/users/niming.webp" alt="企业销售业绩分析系统">
+                <span id="logUserSpan">默认用户 <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li> <a class="multitabs" data-url="#!" href="javascript:void(0)"><i class="mdi mdi-account"></i> 个人信息</a> </li>
+                <li> <a class="multitabs" data-url="index.html" href="javascript:void(0)"><i class="mdi mdi-lock-outline"></i> 修改密码</a> </li>
+
+                <li class="divider"></li>
+                <li> <a href="javascript:unlogin()"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+              </ul>
+            </li>
+            <!--切换主题配色-->
+		    <li class="dropdown dropdown-skin">
+			  <span data-toggle="dropdown" class="icon-palette"><i class="mdi mdi-palette"></i></span>
+			  <ul class="dropdown-menu dropdown-menu-right" data-stoppropagation="true">
+			    <li class="drop-title"><p>LOGO</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="logo_bg" value="default" id="logo_bg_1" checked="">
+                    <label for="logo_bg_1"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_2" id="logo_bg_2">
+                    <label for="logo_bg_2"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_3" id="logo_bg_3">
+                    <label for="logo_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_4" id="logo_bg_4">
+                    <label for="logo_bg_4"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_5" id="logo_bg_5">
+                    <label for="logo_bg_5"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_6" id="logo_bg_6">
+                    <label for="logo_bg_6"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_7" id="logo_bg_7">
+                    <label for="logo_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="logo_bg" value="color_8" id="logo_bg_8">
+                    <label for="logo_bg_8"></label>
+                  </span>
+				</li>
+				<li class="drop-title"><p>头部</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="header_bg" value="default" id="header_bg_1" checked="">
+                    <label for="header_bg_1"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_2" id="header_bg_2">
+                    <label for="header_bg_2"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_3" id="header_bg_3">
+                    <label for="header_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="header_bg" value="color_4" id="header_bg_4">
+                    <label for="header_bg_4"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_5" id="header_bg_5">
+                    <label for="header_bg_5"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_6" id="header_bg_6">
+                    <label for="header_bg_6"></label>                      
+                  </span>                                                    
+                  <span>                                                     
+                    <input type="radio" name="header_bg" value="color_7" id="header_bg_7">
+                    <label for="header_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="header_bg" value="color_8" id="header_bg_8">
+                    <label for="header_bg_8"></label>
+                  </span>
+				</li>
+				<li class="drop-title"><p>侧边栏</p></li>
+				<li class="drop-skin-li clearfix">
+                  <span class="inverse">
+                    <input type="radio" name="sidebar_bg" value="default" id="sidebar_bg_1" checked="">
+                    <label for="sidebar_bg_1"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_2" id="sidebar_bg_2">
+                    <label for="sidebar_bg_2"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_3" id="sidebar_bg_3">
+                    <label for="sidebar_bg_3"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_4" id="sidebar_bg_4">
+                    <label for="sidebar_bg_4"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_5" id="sidebar_bg_5">
+                    <label for="sidebar_bg_5"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_6" id="sidebar_bg_6">
+                    <label for="sidebar_bg_6"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_7" id="sidebar_bg_7">
+                    <label for="sidebar_bg_7"></label>
+                  </span>
+                  <span>
+                    <input type="radio" name="sidebar_bg" value="color_8" id="sidebar_bg_8">
+                    <label for="sidebar_bg_8"></label>
+                  </span>
+				</li>
+			  </ul>
+			</li>
+            <!--切换主题配色-->
+          </ul>
+          
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      
+      <div id="iframe-content"><div class="mt-wrapper " style="height: 100%;">
+        <div class="mt-nav-bar " style="background-color: #ffffff;">
+            <div class="mt-nav mt-nav-tools-left">
+                <ul class="nav nav-tabs">
+                    <li class="mt-move-left">
+                        <a>
+                            <i class="mdi mdi-skip-backward"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <nav class="mt-nav mt-nav-panel" style="width: calc(100% - 132px);">
+                <ul class="nav nav-tabs" style="margin-left: 0px;">
+                    <li class="active">
+                        <a data-id="multitabs_main_0" class="mt-nav-tab" data-type="main" data-index="0" data-url="shouye.html">首页 </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="mt-nav mt-nav-tools-right">
+                <ul class="nav nav-tabs">
+                    <li class="mt-move-right">
+                        <a>
+                            <i class="mdi mdi-skip-forward"></i>
+                        </a>
+                    </li>
+                    <li class="mt-dropdown dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="mdi mdi-menu"></i>
+                            <span class="caret"></span>
+                        </a>
+                        <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                            <li class="mt-show-actived-tab">
+                                <a>显示当前选项卡</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="mt-close-all-tabs">
+                                <a>关闭所有标签页</a>
+                            </li>
+                            <li class="mt-close-other-tabs">
+                                <a>关闭其他标签页</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content mt-tab-content " style="padding-top: 48px;">
+             <iframe id="multitabs_main_0" class="tab-pane active" src="shouye.html" seamless="" style="height: 100%;" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-multitabs/multitabs.js"></script>
+<script type="text/javascript" src="js/index.min.js"></script>
+<script type="text/javascript">
+    $(function (){
+        showLogUser()
+    })
+    function showLogUser(){
+        let logUserStr =sessionStorage.getItem("logUser")
+        console.log(logUserStr)
+        if (!logUserStr){
+             location.href="index.html"
+            return;
+        }
+        let logUser =JSON.parse(logUserStr)
+        console.log(logUser)
+        $("#logUserSpan").html(logUser.userName)
+    }
+
+    /**
+     * 退出
+     */
+    function unlogin(){
+        sessionStorage.removeItem("logUser")
+        location.href ="index.html"
+    }
+</script>
+</body><div id="transmart-crx-shadow-root" style="all: initial;"></div></html>

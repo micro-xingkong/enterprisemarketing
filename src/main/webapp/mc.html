@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>首页 - EMD分析系统</title>
+		<link rel="icon" href="favicon.ico" type="image/ico">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/materialdesignicons.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="js/bootstrap-multitabs/multitabs.min.css">
+		<link href="css/style.min.css" rel="stylesheet">
+      <link href="css/animate.css" rel="stylesheet">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-primary">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">今日收入</p>
+            <p class="h3 text-white m-b-0 fa-1-5x" id="currDaySell">102,125.00</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-currency-cny fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-danger">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">用户总数</p>
+            <p class="h3 text-white m-b-0 fa-1-5x" id="countCus">920,000</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-success">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">今日TOP1员工</p>
+            <p class="h3 text-white m-b-0 fa-1-5x" id="top1User">张奋斗：21000</p>
+          </div>
+          <div class="pull-left">
+            <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-arrow-down-bold fa-1-5x"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="card bg-purple">
+        <div class="card-body clearfix">
+          <div class="pull-right">
+            <p class="h6 text-white m-t-0">今日TOP1类别</p>
+            <p class="h3 text-white m-b-0 fa-1-5x" id="top1Type">家电：12000</p>
+          </div>
+          <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-outline fa-1-5x"></i></span> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    
+    <div class="col-md-6"> 
+      <div class="card">
+        <div class="card-header">
+          <h4>7天销售量</h4>
+        </div>
+        <div class="card-body">
+          <div id="barDiv" style="width:500px; height: 300px;"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6"> 
+      <div class="card">
+        <div class="card-header">
+          <h4>7天销售对比</h4>
+        </div>
+        <div class="card-body">
+          <div id="pieDiv" style="width:500px; height: 300px;"></div>
+        </div>
+      </div>
+    </div>
+     
+  </div>
+
+
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+<!--消息提示-->
+<script src="js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="js/lightyear.js"></script>
+
+<script type="text/javascript" src="js/main.min.js"></script>
+<script src="./js/echarts.js"></script>
+<!--图表插件-->
+<script type="text/javascript" src="js/Chart.js"></script>
+<script type="text/javascript">
+  var barChart = null;
+  var pieChart = null;//echarts.init(document.getElementById("pieDiv"));
+$(function() {
+  //7天销售数据
+  sellDataFor7Day();
+  //7天销售对比
+  sellPieData();
+
+  //加载员工柱状图数据：
+  // loadUsersBarChart();
+
+  //加载员工环状图数据：
+  // loadUsersPieChart();
+
+  //加载显示数据
+  // loadViewData();
+
+});
+
+/**
+ * 初始化7天销售数据
+ */
+function sellDataFor7Day(){
+  barChart = echarts.init(document.getElementById("barDiv"))
+  let option = {
+    //标题
+    title: {
+      text: ''
+    },
+    //鼠标悬浮的提示
+    tooltip: {},
+    //x轴信息
+    xAxis: {
+      data: ['小明', '小丽', '小王', '晓晓']
+    },
+    //y轴信息（默认使用数据的值，自动计算显示）
+    yAxis: {}
+    ,
+    //数据
+    series: [
+      {
+        name: '小明',
+        type: 'bar',
+        smooth: true,
+        data: [179, 122, 121, 104]
+      }
+    ]
+  };
+  barChart.setOption(option);
+}
+
+function sellPieData(){
+  pieChart = echarts.init(document.getElementById("pieDiv"));
+  let option = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
+        label: {
+          show: false,
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          { value: 1048, name: '小明' },
+          { value: 735, name: '小丽' },
+          { value: 580, name: '小王' },
+          { value: 484, name: '晓晓' }
+        ]
+      }
+    ]
+  };
+
+  pieChart.setOption(option);
+}
+
+function loadUsersBarChart(){
+  $.getJSON("sellInfos/queryProUserBarChart", function(riv){
+    console.log("queryProUserBarChart", riv);
+    if(riv.code != 1){
+      lightyear.notify(riv.msg, 'danger', 100);
+      return;
+    }
+
+    let option = {
+      xAxis: {
+        data: riv.content.users
+      },
+      //数据
+      series: [
+        {
+          type: 'bar',
+          data: riv.content.data
+        }
+      ]
+    }
+    barChart.setOption(option);
+  });
+
+}
+
+  function loadUsersPieChart(){
+    $.getJSON("sellInfos/queryProUserPieChart", function(riv){
+      console.log("queryProUserPieChart", riv);
+      if(riv.code != 1){
+        lightyear.notify(riv.msg, 'danger', 100);
+        return;
+      }
+
+      let option = {
+        series: [
+          {
+            data: riv.content
+          }]
+      }
+      pieChart.setOption(option);
+    });
+
+  }
+
+  /**
+   * 加载显示数据
+   */
+  function loadViewData(){
+    //加载今日收入
+    $.getJSON("sellInfos/queryCurrDaySell", function(riv){
+      console.log("queryCurrDaySell", riv);
+      if(riv.code != 1){
+        lightyear.notify(riv.msg, 'danger', 100);
+        return;
+      }
+      $("#currDaySell").html(riv.content);
+    });
+
+    //加载今日Top1员工销量
+    $.getJSON("sellInfos/queryTop1UserSell", function(riv){
+      console.log("queryTop1UserSell", riv);
+      if(riv.code != 1){
+        lightyear.notify(riv.msg, 'danger', 100);
+        return;
+      }
+      $("#top1User").html(riv.content);
+    });
+
+    //加载今日Top1类别销量
+    $.getJSON("sellInfos/queryTop1TypeSell", function(riv){
+      console.log("queryTop1TypeSell", riv);
+      if(riv.code != 1){
+        lightyear.notify(riv.msg, 'danger', 100);
+        return;
+      }
+      $("#top1Type").html(riv.content);
+    });
+
+    //加载注册客户数量
+    $.getJSON("sellInfos/queryCusCount", function(riv){
+      console.log("queryCusCount", riv);
+      if(riv.code != 1){
+        lightyear.notify(riv.msg, 'danger', 100);
+        return;
+      }
+      $("#countCus").html(riv.content);
+    });
+  }
+</script>
+</body>
+</html>

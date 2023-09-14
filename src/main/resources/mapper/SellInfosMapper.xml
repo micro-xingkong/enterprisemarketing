@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seyzn.ruanererzu.mapper.SellInfosMapper">
+
+    <resultMap type="com.seyzn.ruanererzu.domain.CustomersEntity" id="CustomersMap">
+        <result property="cusId" column="cus_id" jdbcType="INTEGER"/>
+        <result property="cusName" column="cus_name" jdbcType="VARCHAR"/>
+        <result property="cusDesc" column="cus_desc" jdbcType="VARCHAR"/>
+        <result property="delMark" column="del_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="com.seyzn.ruanererzu.domain.ProductTypesEntity" id="ProductTypesMap">
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="typeDesc" column="type_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="com.seyzn.ruanererzu.domain.ProductsEntity" id="ProductsMap">
+        <result property="proId" column="pro_id" jdbcType="INTEGER"/>
+        <result property="proName" column="pro_name" jdbcType="VARCHAR"/>
+        <result property="proDesc" column="pro_desc" jdbcType="VARCHAR"/>
+        <result property="proPrice" column="pro_price" jdbcType="NUMERIC"/>
+        <!--依赖标签-->
+        <association property="productTypes" resultMap="ProductTypesMap"/>
+    </resultMap>
+
+    <resultMap type="com.seyzn.ruanererzu.domain.UsersEntity" id="UsersMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPwd" column="user_pwd" jdbcType="VARCHAR"/>
+        <result property="userPic" column="user_pic" jdbcType="VARCHAR"/>
+        <result property="userType" column="user_type" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="delMark" column="del_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="com.seyzn.ruanererzu.domain.SellInfosEntity" id="SellInfosMap">
+        <result property="sellId" column="sell_id" jdbcType="INTEGER"/>
+        <result property="sellTime" column="sell_time" jdbcType="TIMESTAMP"/>
+        <result property="sellDesc" column="sell_desc" jdbcType="VARCHAR"/>
+        <result property="sellCount" column="sell_count" jdbcType="VARCHAR"/>
+        <!--依赖-->
+        <association property="user" resultMap="UsersMap"/>
+        <association property="product" resultMap="ProductsMap"/>
+        <association property="customer" resultMap="CustomersMap"/>
+    </resultMap>
+
+    <!--通用查询sql-->
+    <sql id="baseSel">
+        SELECT
+            s.`sell_id`, s.`sell_count`, s.`sell_desc`, s.`sell_time`,
+            c.`cus_id`, c.`cus_name`, c.`cus_desc`,
+            u.`user_id`, u.`user_name`, u.`user_type`,u.`remark`,
+            p.`pro_id`, p.`pro_name`, p.`pro_price`,
+            t.`type_id`, t.`type_name`, t.`type_desc`
+        FROM
+            `sell_infos` s, users u, products p, product_types t, customers c
+        WHERE s.`user_id` = u.`user_id` AND s.`cus_id` = c.`cus_id` AND s.`pro_id` = p.`pro_id` AND p.`type_id` = t.`type_id`
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SellInfosMap">
+        <include refid="baseSel"></include>
+        and sell_id = #{sellId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SellInfosMap">
+        <include refid="baseSel"></include>
+        <if test="sellInfos.sellId != null">
+            and sell_id = #{sellInfos.sellId}
+        </if>
+        <if test="sellInfos.user != null and sellInfos.user.userId != null">
+            and user_id = #{sellInfos.user.userId}
+        </if>
+        <if test="sellInfos.product != null and sellInfos.product.proId != null">
+            and pro_id = #{sellInfos.product.proId}
+        </if>
+        <if test="sellInfos.customer != null and sellInfos.customer.cusId != null">
+            and cus_id = #{sellInfos.customer.cusId}
+        </if>
+        <if test="sellInfos.sellTime != null">
+            and sell_time = #{sellInfos.sellTime}
+        </if>
+        <if test="sellInfos.sellDesc != null and sellInfos.sellDesc != ''">
+            and sell_desc = #{sellInfos.sellDesc}
+        </if>
+        <if test="sellInfos.sellCount != null">
+            and sell_count = #{sellInfos.sellCount}
+        </if>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from (<include refid="baseSel"></include>) t
+        <where>
+            <if test="sellId != null">
+                and sell_id = #{sellId}
+            </if>
+            <if test="user != null and user.userId != null">
+                and user_id = #{user.userId}
+            </if>
+            <if test="product != null and product.proId != null">
+                and pro_id = #{product.proId}
+            </if>
+            <if test="customer != null and customer.cusId != null">
+                and cus_id = #{customer.cusId}
+            </if>
+            <if test="sellTime != null">
+                and sell_time = #{sellTime}
+            </if>
+            <if test="sellDesc != null and sellDesc != ''">
+                and sell_desc = #{sellDesc}
+            </if>
+            <if test="sellCount != null">
+                and sell_count = #{sellCount}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="sellId" useGeneratedKeys="true">
+        insert into sell_infos(user_id, pro_id, cus_id, sell_time, sell_desc, sell_count)
+        values (#{user.userId}, #{product.proId}, #{customer.cusId}, now(), #{sellDesc}, #{sellCount})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="sellId" useGeneratedKeys="true">
+        insert into sell_infos(user_id, pro_id, cus_id, sell_time, sell_desc, sell_count)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.user.userId}, #{entity.product.proId}, #{entity.customer.cusId}, #{entity.sellTime}, #{entity.sellDesc}, #{entity.sellCount})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="sellId" useGeneratedKeys="true">
+        insert into sell_infos(user_id, pro_id, cus_id, sell_time, sell_desc, sell_count)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.user.userId}, #{entity.product.proId}, #{entity.customer.cusId}, #{entity.sellTime}, #{entity.sellDesc}, #{entity.sellCount})
+        </foreach>
+        on duplicate key update
+        user_id = values(user.user_id),
+        pro_id = values(product.pro_id),
+        cus_id = values(customer.cus_id),
+        sell_time = values(sell_time),
+        sell_desc = values(sell_desc),
+        sell_count = values(sell_count)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sell_infos
+        <set>
+            <if test="user != null and user.userId != null">
+                user_id = #{user.userId},
+            </if>
+            <if test="product != null and product.proId != null">
+                pro_id = #{product.proId},
+            </if>
+            <if test="customer != null and customer.cusId != null">
+                cus_id = #{customer.cusId},
+            </if>
+            <if test="sellTime != null">
+                sell_time = #{sellTime},
+            </if>
+            <if test="sellDesc != null and sellDesc != ''">
+                sell_desc = #{sellDesc},
+            </if>
+            <if test="sellCount != null">
+                sell_count = #{sellCount},
+            </if>
+        </set>
+        where sell_id = #{sellId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sell_infos where sell_id = #{sellId}
+    </delete>
+
+    <!--查询类别销售趋势信息
+    Map<String, Object> getProTypeSellInfo(List<String> date)-->
+    <select id="getProTypeSellInfo" resultType="map" parameterType="collection">
+        SELECT t.`type_name`,
+        <foreach collection="collection" item="sellDate" separator=",">
+            SUM(CASE sell_time WHEN #{sellDate} THEN sell_price ELSE 0 END ) "${sellDate}"
+        </foreach>
+        FROM(
+        SELECT SUM(IFNULL(s.`sell_count` * p.pro_price , 0)) sell_price,
+        DATE_FORMAT(s.sell_time, '%Y-%m-%d') sell_time, t.type_name
+        FROM sell_infos s JOIN products p ON(p.`pro_id` = s.`pro_id`)
+        RIGHT JOIN product_types t ON(p.`type_id` = t.`type_id`)
+        GROUP BY DATE_FORMAT(s.sell_time, '%Y-%m-%d'), type_name) t
+        GROUP BY type_name
+    </select>
+
+    <!--查询最大销售时间
+    String getLastSellTime()-->
+    <select id="getLastSellTime" resultType="string">
+        SELECT DATE_FORMAT(MAX(sell_time), '%Y-%m-%d') FROM sell_infos
+    </select>
+
+
+</mapper>
+

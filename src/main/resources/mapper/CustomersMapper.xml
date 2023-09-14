@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seyzn.ruanererzu.mapper.CustomersMapper">
+
+    <resultMap type="com.seyzn.ruanererzu.domain.CustomersEntity" id="CustomersMap">
+        <result property="cusId" column="cus_id" jdbcType="INTEGER"/>
+        <result property="cusName" column="cus_name" jdbcType="VARCHAR"/>
+        <result property="cusDesc" column="cus_desc" jdbcType="VARCHAR"/>
+        <result property="delMark" column="del_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CustomersMap">
+        select
+          cus_id, cus_name, cus_desc, del_mark
+        from customers
+        where cus_id = #{cusId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CustomersMap">
+        select
+          cus_id, cus_name, cus_desc, del_mark
+        from customers
+        where del_mark=1
+            <if test="customers.cusId != null">
+                and cus_id = #{customers.cusId}
+            </if>
+            <if test="customers.cusName != null and customers.cusName != ''">
+                and cus_name = #{customers.cusName}
+            </if>
+            <if test="customers.cusDesc != null and customers.cusDesc != ''">
+                and cus_desc = #{customers.cusDesc}
+            </if>
+
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from customers
+        where del_mark=1
+            <if test="cusId != null">
+                and cus_id = #{cusId}
+            </if>
+            <if test="cusName != null and cusName != ''">
+                and cus_name = #{cusName}
+            </if>
+            <if test="cusDesc != null and cusDesc != ''">
+                and cus_desc = #{cusDesc}
+            </if>
+            <if test="delMark != null">
+                and del_mark = #{delMark}
+            </if>
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="cusId" useGeneratedKeys="true">
+        insert into customers(cus_name, cus_desc, del_mark)
+        values (#{cusName}, #{cusDesc}, 1)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="cusId" useGeneratedKeys="true">
+        insert into customers(cus_name, cus_desc, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.cusName}, #{entity.cusDesc}, #{entity.delMark})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="cusId" useGeneratedKeys="true">
+        insert into customers(cus_name, cus_desc, del_mark)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cusName}, #{entity.cusDesc}, #{entity.delMark})
+        </foreach>
+        on duplicate key update
+        cus_name = values(cus_name),
+        cus_desc = values(cus_desc),
+        del_mark = values(del_mark)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update customers
+        <set>
+            <if test="cusName != null and cusName != ''">
+                cus_name = #{cusName},
+            </if>
+            <if test="cusDesc != null and cusDesc != ''">
+                cus_desc = #{cusDesc},
+            </if>
+<!--            <if test="delMark != null">-->
+<!--                del_mark = #{delMark},-->
+<!--            </if>-->
+        </set>
+        where cus_id = #{cusId}
+    </update>
+
+    <!--通过主键删除-->
+<!--    <delete id="deleteById">-->
+<!--        delete from customers where cus_id = #{cusId}-->
+<!--    </delete>-->
+    <update id="deleteById">
+        UPDATE customers SET del_mark = 0 WHERE cus_id = #{proId}
+    </update>
+
+</mapper>
+
